@@ -8,7 +8,7 @@ export const InputComponent = (props) => {
     const handleSubmit = async (e) => {
         // http://127.0.0.1:8000
         setIsCharging(true);
-        fetch('http://127.0.0.1:8000/query', {
+        fetch(import.meta.env.VITE_API + '/query', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -20,6 +20,7 @@ export const InputComponent = (props) => {
             setMessages([...messages, { id: messages.length + 1, text: message, type: 'query' }])
             setMessages([...messages, { id: messages.length + 1, text: data.text, type: 'message' }])
             setMessage('');
+            console.log(data)
         })
         .catch(error => console.log(error))
         .finally(() => setIsCharging(false));
