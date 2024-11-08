@@ -1,22 +1,24 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 
 export const ChatComponent = (props) => {
     const messages = props.messages;
     const isCharging = props.isCharging;
     const setMessages = props.setMessages;
+    const [loadingText, setLoadingText] = useState('...');
 
     useEffect(() => {
         if (isCharging) {
-            // Añadimos un mensaje de ... que va cambiando . .. ...
-            if (messages[messages.length - 1].text !== '...') {
-                setMessages([...messages, { id: messages.length + 1, text: '...', type: 'message' }])
-            }
-            else {
-                // Eliminamos el mensaje de ... si ya está
-                setMessages(messages.slice(0, messages.length - 1))
-            }
+          const interval = setInterval(() => {
+            setLoadingText(prev => {
+              if (prev === '.') return '..';
+              if (prev === '..') return '...';
+              return '.';
+            });
+          }, 500); // Cambia la duración si quieres que se actualice más rápido o más lento
+    
+          return () => clearInterval(interval); // Limpia el intervalo cuando el componente se desmonta o `isCharging` cambia
         }
-    }, [isCharging])
+      }, [isCharging]);
   return (
     <div className='flex flex-col gap2 w-full mb-5'>
         {messages.map((message) => (
@@ -27,6 +29,13 @@ export const ChatComponent = (props) => {
                 </div>
             </div>
         ))}
+        {isCharging && (
+            <div className='flex justify-start rounded-lg'>
+                <div className='bg-white p-2 rounded-lg text-black'>
+                    <p>{loadingText}</p>
+                </div>
+            </div>
+        )}
     </div>
   )
 }

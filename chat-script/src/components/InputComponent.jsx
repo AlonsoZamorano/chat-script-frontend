@@ -18,7 +18,7 @@ export const InputComponent = (props) => {
         .then(response => response.json())
         .then(data => {
             setMessages([...messages, { id: messages.length + 1, text: message, type: 'query' }])
-            setMessages([...messages, { id: messages.length + 1, text: data.text, type: 'message' }])
+            setMessages([...messages, { id: messages.length + 1, text: data, type: 'message' }])
             setMessage('');
             console.log(data)
         })
